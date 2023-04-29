@@ -107,7 +107,10 @@ export default function TimeIntervals() {
 
   return (
     <>
-      <NextSeo title="Selecione sua disponibilidade | Ignite Call" noindex />
+      <NextSeo
+        title="Selecione sua disponibilidade | Leucotron Agenda"
+        noindex
+      />
       <Container>
         <Header>
           <Heading as="strong" color="blue100">
