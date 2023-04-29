@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
+import { api } from '@component/lib/axios'
 
 const VerifyUsernameFormSchema = z.object({
   username: z
@@ -33,7 +34,13 @@ export function VerifyUsernameForm() {
   async function handleVerifyUsername(data: VerifyUsernameFormData) {
     const { username } = data
 
-    await router.push(`/register?username=${username}`)
+    const response = await api.get(`users/user/${username}`)
+
+    if (response.status === 202) {
+      await router.push(`/register?username=${username}`)
+    } else {
+      await router.push(`/register/connect-calendar`)
+    }
   }
 
   return (
