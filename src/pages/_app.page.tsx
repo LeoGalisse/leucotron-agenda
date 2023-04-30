@@ -1,4 +1,6 @@
+import { queryClient } from '@component/lib/react-query'
 import { globalStyles } from '@component/styles/global'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { SessionProvider } from 'next-auth/react'
 import { DefaultSeo } from 'next-seo'
 import type { AppProps } from 'next/app'
@@ -10,16 +12,18 @@ export default function App({
   pageProps: { session, ...pageProps },
 }: AppProps) {
   return (
-    <SessionProvider session={session}>
-      <DefaultSeo
-        openGraph={{
-          type: 'website',
-          locale: 'pt_BR',
-          url: '',
-          siteName: 'Leucotron Agenda',
-        }}
-      />
-      <Component {...pageProps} />
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider session={session}>
+        <DefaultSeo
+          openGraph={{
+            type: 'website',
+            locale: 'pt_BR',
+            url: '',
+            siteName: 'Leucotron Agenda',
+          }}
+        />
+        <Component {...pageProps} />
+      </SessionProvider>
+    </QueryClientProvider>
   )
 }
