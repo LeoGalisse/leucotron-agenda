@@ -3,6 +3,7 @@ import { Container, UserHeader } from './styles'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { prisma } from '@component/lib/prisma'
 import { NextSeo } from 'next-seo'
+import { ScheduleForm } from './ScheduleForm'
 
 interface ScheduleProps {
   user: {
@@ -22,6 +23,7 @@ export default function Schedule({ user }: ScheduleProps) {
           <Heading color="blue100">{user.name}</Heading>
           <Text>{user.bio}</Text>
         </UserHeader>
+        <ScheduleForm />
       </Container>
     </>
   )
