@@ -18,14 +18,14 @@ export const CalendarTitle = styled(Text, {
   textTransform: 'capitalize',
 
   span: {
-    color: '$gray200',
+    color: '$blue800',
   },
 })
 
 export const CalendarActions = styled('div', {
   display: 'flex',
   gap: '$2',
-  color: '$gray200',
+  color: '$blue800',
 
   button: {
     all: 'unset',
@@ -39,11 +39,11 @@ export const CalendarActions = styled('div', {
     },
 
     '&:hover': {
-      color: '$gray100',
+      color: '$blue600',
     },
 
     '&:focus': {
-      boxShadow: '0 0 0 2px $colors$gray100',
+      boxShadow: '0 0 0 2px $colors$blue400',
     },
   },
 })
@@ -55,7 +55,7 @@ export const CalendarBody = styled('table', {
   tableLayout: 'fixed',
 
   'thead th': {
-    color: '$gray200',
+    color: '$blue800',
     fontWeight: '$medium',
     fontSize: '$sm',
   },
@@ -64,7 +64,7 @@ export const CalendarBody = styled('table', {
     content: '.',
     lineHeight: '0.75rem',
     display: 'block',
-    color: '$gray800',
+    color: '$blue200',
   },
 
   'tbody td': {
@@ -76,22 +76,23 @@ export const CalendarDay = styled('button', {
   all: 'unset',
   width: '100%',
   aspectRatio: '1 / 1',
-  background: '$gray600',
+  background: '$blue600',
   textAlign: 'center',
   cursor: 'pointer',
   borderRadius: '$sm',
+  color: '$blue950',
 
   '&:disabled': {
     background: 'none',
     cursor: 'default',
-    opacity: 0.4,
+    opacity: 0.7,
   },
 
   '&:not(:disabled):hover': {
-    background: '$gray500',
+    background: '$blue400',
   },
 
   '&:focus': {
-    boxShadow: '0 0 0 2px $colors$gray100',
+    boxShadow: '0 0 0 2px $colors$blue950',
   },
 })

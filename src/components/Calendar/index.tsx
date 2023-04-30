@@ -150,7 +150,7 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
   return (
     <CalendarContainer>
       <CalendarHeader>
-        <CalendarTitle>
+        <CalendarTitle color="blue950">
           {currentMonth} <span>{currentYear}</span>
         </CalendarTitle>
 
