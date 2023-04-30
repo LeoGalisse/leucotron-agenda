@@ -1,5 +1,5 @@
 import { Avatar, Heading, Text } from '@leucotron-ui/react'
-import { Container, UserHeader } from './styles'
+import { Container, UserContent, UserHeader } from './styles'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { prisma } from '@component/lib/prisma'
 import { NextSeo } from 'next-seo'
@@ -20,8 +20,10 @@ export default function Schedule({ user }: ScheduleProps) {
       <Container>
         <UserHeader>
           <Avatar src={user.avatarUrl} />
-          <Heading color="blue100">{user.name}</Heading>
-          <Text>{user.bio}</Text>
+          <UserContent>
+            <Heading color="blue100">{user.name}</Heading>
+            <Text>{user.bio}</Text>
+          </UserContent>
         </UserHeader>
         <ScheduleForm />
       </Container>
