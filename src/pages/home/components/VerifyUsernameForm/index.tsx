@@ -39,7 +39,7 @@ export function VerifyUsernameForm() {
     if (response.status === 202) {
       await router.push(`/register?username=${username}`)
     } else {
-      await router.push(`/register/connect-calendar`)
+      await router.push('/connect')
     }
   }
 
