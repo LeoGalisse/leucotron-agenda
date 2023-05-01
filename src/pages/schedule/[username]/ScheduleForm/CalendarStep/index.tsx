@@ -118,7 +118,7 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
               if (!availability.availableTimes.includes(hour)) {
                 const isBlocked = availability.blockedTimes.some(
                   (blockedTime) =>
-                    new Date(blockedTime.date).getHours() === hour + 3,
+                    new Date(blockedTime.date).getHours() === hour - 1,
                 )
 
                 if (isBlocked) {
@@ -131,7 +131,7 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
                       {availability.blockedTimes.map((blockedTime) => {
                         if (
                           new Date(blockedTime.date).getHours() ===
-                          hour + 3
+                          hour - 1
                         ) {
                           return <span key={hour}>{blockedTime.title}</span>
                         } else return null
@@ -162,7 +162,7 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
       {dateOccupied && (
         <AppointmentInfo>
           {availability?.blockedTimes.map((blockedTime) => {
-            if (new Date(blockedTime.date).getHours() === appointmentHour + 3) {
+            if (new Date(blockedTime.date).getHours() === appointmentHour - 1) {
               return (
                 <AppointmentContainer key={appointmentHour}>
                   <AppointmentHeader
@@ -171,15 +171,15 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
                     size="lg"
                   >
                     {blockedTime.title} às{' '}
-                    {String(appointmentHour + 3).padStart(2, '0')}
+                    {String(appointmentHour - 1).padStart(2, '0')}
                     :00h
                     <Text color="stone950">
                       {weekDay}, <span>{describedDate}</span>
                     </Text>
                     <Text color="stone950">
-                      {appointmentHour + 3}:00h -{' '}
+                      {appointmentHour - 1}:00h -{' '}
                       {handleAppointmentFinalDate(
-                        appointmentHour + 3,
+                        appointmentHour - 1,
                         blockedTime.final_date,
                       )}
                     </Text>
