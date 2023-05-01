@@ -71,6 +71,7 @@ model UserTimeInterval {
 model Scheduling {
   id           String   @id @default(uuid())
   date         DateTime
+  final_date   Int      @default(60)
   title        String
   name         String
   email        String

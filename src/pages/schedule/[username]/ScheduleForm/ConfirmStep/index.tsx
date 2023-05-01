@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import { api } from '@component/lib/axios'
 import { useRouter } from 'next/router'
+import { convertTimeStringToMinutes } from '@component/utils/convert-time-string-to-minutes'
 
 const confirmFormSchema = z.object({
   title: z.string().nonempty({ message: 'O título é obrigatório' }),
@@ -15,6 +16,9 @@ const confirmFormSchema = z.object({
     .min(3, { message: 'O nome precisa de no mínimo 3 caracteres' }),
   email: z.string().email({ message: 'E-mail inválido' }),
   local: z.string(),
+  finalDate: z.string().transform((date) => {
+    return convertTimeStringToMinutes(date)
+  }),
   observations: z.string().nullable(),
 })
 
@@ -41,7 +45,7 @@ export function ConfirmStep({
   const username = String(router.query.username)
 
   async function handleConfirmScheduling(data: ConfirmFormData) {
-    const { title, name, email, local, observations } = data
+    const { title, name, email, local, finalDate, observations } = data
 
     await api.post(`/users/${username}/schedule`, {
       title,
@@ -50,6 +54,7 @@ export function ConfirmStep({
       local,
       observations,
       date: schedulingDate,
+      final_date: finalDate,
     })
 
     onCancelConfirmation()
@@ -108,6 +113,13 @@ export function ConfirmStep({
           Local
         </Text>
         <TextInput placeholder="Local do agendamento" {...register('local')} />
+      </label>
+
+      <label>
+        <Text size="sm" color="blue950">
+          Tempo de duração
+        </Text>
+        <TextInput type="time" {...register('finalDate')} />
       </label>
 
       <label>

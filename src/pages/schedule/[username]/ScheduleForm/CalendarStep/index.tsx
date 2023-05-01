@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import { api } from '@component/lib/axios'
 import { useQuery } from '@tanstack/react-query'
 import { Text } from '@leucotron-ui/react'
+import { convertTimeNumberToDate } from '@component/utils/convert-time-number-to-date'
 
 interface Availability {
   possibleTimes: number[]
@@ -28,6 +29,7 @@ interface Availability {
       name: string
       email: string
       local: string
+      final_date: number
       observations: string | null
     },
   ]
@@ -86,6 +88,19 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
     setHour(data)
   }
 
+  function handleAppointmentFinalDate(data: number, finalDate: number) {
+    const { hours, minutes } = convertTimeNumberToDate(finalDate)
+    const addAppointmentHourWithHours = hours + data
+
+    const hoursString =
+      addAppointmentHourWithHours < 10
+        ? `0${addAppointmentHourWithHours}`
+        : `${addAppointmentHourWithHours}`
+    const minutesString = minutes < 10 ? `0${minutes}` : `${minutes}`
+
+    return `${hoursString}:${minutesString}h`
+  }
+
   return (
     <Container
       isTimePickerOpen={isDateSelected}
@@ -101,19 +116,32 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
           <TimePickerList>
             {availability?.possibleTimes.map((hour) => {
               if (!availability.availableTimes.includes(hour)) {
-                return (
-                  <TimePickerItem
-                    key={hour}
-                    onClick={() => handleSelectAppointment(hour)}
-                  >
-                    {String(hour).padStart(2, '0')}:00h{' '}
-                    {availability.blockedTimes.map((blockedTime) => {
-                      if (new Date(blockedTime.date).getHours() === hour) {
-                        return <span key={hour}>{blockedTime.title}</span>
-                      } else return null
-                    })}
-                  </TimePickerItem>
+                const isBlocked = availability.blockedTimes.some(
+                  (blockedTime) =>
+                    new Date(blockedTime.date).getHours() === hour,
                 )
+
+                if (isBlocked) {
+                  return (
+                    <TimePickerItem
+                      key={hour}
+                      onClick={() => handleSelectAppointment(hour)}
+                    >
+                      {String(hour).padStart(2, '0')}:00h{' '}
+                      {availability.blockedTimes.map((blockedTime) => {
+                        if (new Date(blockedTime.date).getHours() === hour) {
+                          return <span key={hour}>{blockedTime.title}</span>
+                        } else return null
+                      })}
+                    </TimePickerItem>
+                  )
+                } else {
+                  return (
+                    <TimePickerItem key={hour} disabled>
+                      {String(hour).padStart(2, '0')}:00h
+                    </TimePickerItem>
+                  )
+                }
               } else {
                 return (
                   <TimePickerItem
@@ -146,7 +174,11 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
                       {weekDay}, <span>{describedDate}</span>
                     </Text>
                     <Text color="stone950">
-                      {appointmentHour}:00h - {appointmentHour + 1}:00h
+                      {appointmentHour}:00h -{' '}
+                      {handleAppointmentFinalDate(
+                        appointmentHour,
+                        blockedTime.final_date,
+                      )}
                     </Text>
                   </AppointmentHeader>
                   <AppointmentWhereWho>
