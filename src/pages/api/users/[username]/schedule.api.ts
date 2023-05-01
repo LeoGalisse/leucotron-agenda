@@ -27,15 +27,16 @@ export default async function handle(
   }
 
   const createSchedulingBody = z.object({
+    title: z.string().nonempty(),
     name: z.string(),
     email: z.string().email(),
+    local: z.string(),
     observations: z.string(),
     date: z.string().datetime(),
   })
 
-  const { name, email, observations, date } = createSchedulingBody.parse(
-    req.body,
-  )
+  const { title, name, email, local, observations, date } =
+    createSchedulingBody.parse(req.body)
 
   const schedulingDate = dayjs(date).startOf('hour')
 
@@ -56,8 +57,10 @@ export default async function handle(
 
   const scheduling = await prisma.scheduling.create({
     data: {
+      title,
       name,
       email,
+      local,
       observations,
       date: schedulingDate.toDate(),
       user_id: user.id,
@@ -67,13 +70,16 @@ export default async function handle(
   const calendar = google.calendar({
     version: 'v3',
     auth: await getGoogleOAuthToken(user.id),
+    params: {
+      sendNotifications: true,
+    },
   })
 
   await calendar.events.insert({
     calendarId: 'primary',
     conferenceDataVersion: 1,
     requestBody: {
-      summary: `Ignite Call: Scheduling with ${name}`,
+      summary: title,
       description: observations,
       start: {
         dateTime: schedulingDate.format(),
@@ -81,6 +87,7 @@ export default async function handle(
       end: {
         dateTime: schedulingDate.add(1, 'hour').format(),
       },
+      location: local,
       attendees: [{ email, displayName: name }],
       conferenceData: {
         createRequest: {

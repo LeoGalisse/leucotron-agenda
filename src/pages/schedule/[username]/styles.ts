@@ -1,7 +1,7 @@
 import { Heading, styled } from '@leucotron-ui/react'
 
 export const Container = styled('div', {
-  maxWidth: 852,
+  maxWidth: 1100,
   padding: '0 $4',
   margin: 'auto',
 
