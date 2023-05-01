@@ -9,10 +9,12 @@ import { api } from '@component/lib/axios'
 import { useRouter } from 'next/router'
 
 const confirmFormSchema = z.object({
+  title: z.string().nonempty({ message: 'O título é obrigatório' }),
   name: z
     .string()
     .min(3, { message: 'O nome precisa de no mínimo 3 caracteres' }),
   email: z.string().email({ message: 'E-mail inválido' }),
+  local: z.string(),
   observations: z.string().nullable(),
 })
 
@@ -39,11 +41,13 @@ export function ConfirmStep({
   const username = String(router.query.username)
 
   async function handleConfirmScheduling(data: ConfirmFormData) {
-    const { name, email, observations } = data
+    const { title, name, email, local, observations } = data
 
     await api.post(`/users/${username}/schedule`, {
+      title,
       name,
       email,
+      local,
       observations,
       date: schedulingDate,
     })
@@ -69,6 +73,16 @@ export function ConfirmStep({
 
       <label>
         <Text size="sm" color="blue950">
+          Título
+        </Text>
+        <TextInput placeholder="Título do agendamento" {...register('title')} />
+        {errors.title && (
+          <FormError size="sm">{errors.title.message}</FormError>
+        )}
+      </label>
+
+      <label>
+        <Text size="sm" color="blue950">
           Nome completo
         </Text>
         <TextInput placeholder="Seu nome" {...register('name')} />
@@ -87,6 +101,13 @@ export function ConfirmStep({
         {errors.email && (
           <FormError size="sm">{errors.email.message}</FormError>
         )}
+      </label>
+
+      <label>
+        <Text size="sm" color="blue950">
+          Local
+        </Text>
+        <TextInput placeholder="Local do agendamento" {...register('local')} />
       </label>
 
       <label>

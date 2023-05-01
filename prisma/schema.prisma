@@ -71,8 +71,10 @@ model UserTimeInterval {
 model Scheduling {
   id           String   @id @default(uuid())
   date         DateTime
+  title        String
   name         String
   email        String
+  local        String
   observations String?
   created_at   DateTime @default(now())
 
