@@ -99,7 +99,7 @@ export const AppointmentInfo = styled('div', {
   borderLeft: '1px solid $blue600',
   padding: '$6 $6 0',
 
-  width: 280,
+  width: 290,
 
   '@media(max-width: 900px)': {
     position: 'relative',
@@ -108,7 +108,12 @@ export const AppointmentInfo = styled('div', {
   },
 })
 
-export const AppointmentContainer = styled('div', {})
+export const AppointmentContainer = styled('div', {
+  '@media(max-width: 900px)': {
+    overflowY: 'scroll',
+    height: '100%',
+  },
+})
 
 export const AppointmentHeader = styled(Text, {
   paddingBottom: '$4',

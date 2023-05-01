@@ -64,6 +64,7 @@ export default async function handle(
       name: true,
       email: true,
       local: true,
+      final_date: true,
       observations: true,
     },
     where: {

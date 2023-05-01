@@ -5,6 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import dayjs from 'dayjs'
 import { getGoogleOAuthToken } from '@component/lib/google'
 import { google } from 'googleapis'
+import { convertTimeNumberToDate } from '@component/utils/convert-time-number-to-date'
 
 export default async function handle(
   req: NextApiRequest,
@@ -33,9 +34,10 @@ export default async function handle(
     local: z.string(),
     observations: z.string(),
     date: z.string().datetime(),
+    final_date: z.number(),
   })
 
-  const { title, name, email, local, observations, date } =
+  const { title, name, email, local, observations, date, final_date } =
     createSchedulingBody.parse(req.body)
 
   const schedulingDate = dayjs(date).startOf('hour')
@@ -63,9 +65,12 @@ export default async function handle(
       local,
       observations,
       date: schedulingDate.toDate(),
+      final_date,
       user_id: user.id,
     },
   })
+
+  const { hours, minutes } = convertTimeNumberToDate(final_date)
 
   const calendar = google.calendar({
     version: 'v3',
@@ -85,7 +90,10 @@ export default async function handle(
         dateTime: schedulingDate.format(),
       },
       end: {
-        dateTime: schedulingDate.add(1, 'hour').format(),
+        dateTime: schedulingDate
+          .add(hours, 'hour')
+          .add(minutes, 'minute')
+          .format(),
       },
       location: local,
       attendees: [{ email, displayName: name }],

@@ -12,6 +12,10 @@ export const ConfirmForm = styled(Box, {
     display: 'flex',
     flexDirection: 'column',
     gap: '$2',
+
+    'input::-webkit-calendar-picker-indicator': {
+      filter: 'invert(100%) brightness(30%) saturate(0%)',
+    },
   },
 })
 
