@@ -118,7 +118,7 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
               if (!availability.availableTimes.includes(hour)) {
                 const isBlocked = availability.blockedTimes.some(
                   (blockedTime) =>
-                    new Date(blockedTime.date).getHours() === hour,
+                    new Date(blockedTime.date).getHours() === hour - 1,
                 )
 
                 if (isBlocked) {
@@ -129,7 +129,10 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
                     >
                       {String(hour).padStart(2, '0')}:00h{' '}
                       {availability.blockedTimes.map((blockedTime) => {
-                        if (new Date(blockedTime.date).getHours() === hour) {
+                        if (
+                          new Date(blockedTime.date).getHours() ===
+                          hour - 1
+                        ) {
                           return <span key={hour}>{blockedTime.title}</span>
                         } else return null
                       })}
@@ -159,7 +162,7 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
       {dateOccupied && (
         <AppointmentInfo>
           {availability?.blockedTimes.map((blockedTime) => {
-            if (new Date(blockedTime.date).getHours() === appointmentHour) {
+            if (new Date(blockedTime.date).getHours() === appointmentHour - 1) {
               return (
                 <AppointmentContainer key={appointmentHour}>
                   <AppointmentHeader
@@ -168,15 +171,15 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
                     size="lg"
                   >
                     {blockedTime.title} às{' '}
-                    {String(appointmentHour).padStart(2, '0')}
+                    {String(appointmentHour - 1).padStart(2, '0')}
                     :00h
                     <Text color="stone950">
                       {weekDay}, <span>{describedDate}</span>
                     </Text>
                     <Text color="stone950">
-                      {appointmentHour}:00h -{' '}
+                      {appointmentHour - 1}:00h -{' '}
                       {handleAppointmentFinalDate(
-                        appointmentHour,
+                        appointmentHour - 1,
                         blockedTime.final_date,
                       )}
                     </Text>
